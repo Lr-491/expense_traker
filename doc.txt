@@ -1,0 +1,83 @@
+Création du Backend Django
+
+1-/Créer un environnement virtuel
+python -m venv venv
+
+Activùtion :
+venv\Scripts\activate
+
+2-/Installation des dépendances
+
+pip install django djangorestframework djangorestframework-simplejwt
+
+3-/Création du projet
+django-admin startproject expense_tracker
+cd expense_tracker
+
+4-/Création de l'application API
+python manage.py startapp api
+
+Maintenant la configuration de l'application
+
+5-/Modifier settings.py (expense_tracker/settings.py)
+
+Ajoute dans INSTALLED_APPS :
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    'api',
+]
+
+Ajouter config JWT
+Toujours dans settings.py, ajoute à la fin :
+
+from datetime import timedelta
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+}
+
+7-/Appliquer les migrations
+python manage.py migrate
+
+8-/Et enfin Lancer le serveur
+python manage.py runserver
+
+lien : `http://127.0.0.1:8000`
+
+
+PROCESSUS DE LA CONCEPTION 
+
+I-/Créer les modèles
+
+Category
+
+Expense
+
+Dans api/models.py
+
+II-/Faire les migrations
+python manage.py makemigrations
+python manage.py migrate
+
+III-/Enregistrer les modèles dans l’admin
+Dans api/admin.py
+
+IV-/Créer un superuser
+python manage.py createsuperuser
+username : admin
+Email address: admin123@gmail.com
+password : superadmin123
+
+V-/Tester l’admin
+Lance le serveur :
+
+python manage.py runserver
+
+Lien = ``http://127.0.0.1:8000/admin``
