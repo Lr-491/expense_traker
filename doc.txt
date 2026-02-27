@@ -81,3 +81,121 @@ Lance le serveur :
 python manage.py runserver
 
 Lien = ``http://127.0.0.1:8000/admin``
+
+
+Maintenant on transforme les modèles en API REST propre.
+
+ÉTAPE 1 — Créer les Serializers
+Crée un fichier :
+
+📁 api/serializers.py
+
+ÉTAPE 2 — Créer les Views API
+Ouvre :
+
+📁 api/views.py
+
+🎯 ÉTAPE 3 — Configurer les URLs
+Crée :
+
+📁 api/urls.py
+
+🎯 ÉTAPE 4 — Connecter au projet principal
+Ouvre :
+
+📁 expense_tracker/urls.py
+
+🎯 ÉTAPE 5 — Tester l’API
+Lien = `http://127.0.0.1:8000/api/categories/`
+
+ erreur 401 Unauthorized.
+
+ l’API est protégée
+
+
+ Parfait 😎
+
+On va utiliser ton **superuser admin** pour générer un token JWT et tester l’API directement via l’admin ou Postman.
+
+---
+
+# 🔑 Étape 1 — Obtenir le token JWT
+
+Ton URL pour récupérer le token est :
+
+```
+http://127.0.0.1:8000/api/token/
+```
+
+### Méthode :
+
+* Méthode : **POST**
+* Body : JSON
+
+```json
+{
+  "username": "ton_nom_admin",
+  "password": "ton_mot_de_passe_admin"
+}
+```
+
+Réponse attendue :
+
+```json
+{
+  "refresh": "…",
+  "access": "…"
+}
+```
+
+* `access` = token que tu vas utiliser pour t’authentifier
+* `refresh` = pour renouveler l’access quand il expire
+
+---
+
+# 🔑 Étape 2 — Utiliser le token
+
+Dans Postman ou ton frontend mobile :
+
+* Header :
+
+```
+Authorization: Bearer <ton_access_token>
+```
+
+* URL API exemples :
+
+```
+GET http://127.0.0.1:8000/api/categories/
+POST http://127.0.0.1:8000/api/expenses/
+```
+
+POST body pour créer une dépense :
+
+```json
+{
+  "category": 1,
+  "amount": "25.50",
+  "description": "Repas midi"
+}
+```
+
+Angular / React Native pourra utiliser exactement la même structure.
+
+---
+
+# 🔑 Étape 3 — Tester avec l’admin
+
+* Va dans l’admin : [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+* Ajoute quelques catégories
+* Tu peux maintenant tester les dépenses via Postman avec les catégories existantes.
+
+---
+
+# 💡 Rappel important
+
+* Chaque dépense sera automatiquement liée à l’utilisateur connecté (`user`)
+* C’est le `perform_create()` dans la viewset qui s’en occupe
+
+---
+
